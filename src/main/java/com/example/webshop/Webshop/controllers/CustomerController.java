@@ -32,7 +32,12 @@ private final CustomerRepo customerRepo;
         Customer tempcustomer=customerRepo.findById(id).get();
         tempCusName=tempcustomer.getFullName();
         customerRepo.deleteById(id);
-        return "Customer "+tempCusName+" was successfully removed from database !";
+        return "Customer "+tempCusName+" was successfully removed from database!";
+    }
+    @RequestMapping("/cusinfo/{id}")
+    public String customerInformation(@PathVariable Long id ){
+        Customer cus=customerRepo.findById(id).get();
+        return "This is the Customers full name: "+cus.getFullName()+" and this is their SSN: "+cus.getSSN();
     }
 
 }
