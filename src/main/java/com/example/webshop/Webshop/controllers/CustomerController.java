@@ -2,10 +2,7 @@ package com.example.webshop.Webshop.controllers;
 
 import com.example.webshop.Webshop.models.Customer;
 import com.example.webshop.Webshop.repos.CustomerRepo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +25,14 @@ private final CustomerRepo customerRepo;
     @RequestMapping("/allCustomers")
     public List<Customer> allCustomers(){
         return customerRepo.findAll();
+    }
+    @RequestMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable Long id ){
+        String tempCusName;
+        Customer tempcustomer=customerRepo.findById(id).get();
+        tempCusName=tempcustomer.getFullName();
+        customerRepo.deleteById(id);
+        return "Customer "+tempCusName+" was successfully removed from database !";
     }
 
 }
