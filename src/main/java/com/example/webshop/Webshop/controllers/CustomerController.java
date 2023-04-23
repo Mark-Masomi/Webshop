@@ -22,7 +22,7 @@ private final CustomerRepo customerRepo;
         this.customerRepo = customerRepo;
     }
 
-    @RequestMapping("")
+    @GetMapping("")
     CollectionModel<EntityModel<Customer>> all(){
         List<EntityModel<Customer>> customerList=customerRepo.findAll().stream()
                 .map(item ->EntityModel.of(item,
@@ -39,7 +39,7 @@ private final CustomerRepo customerRepo;
 
         return EntityModel.of(customer,
                 linkTo(methodOn(CustomerController.class).one(id)).withSelfRel(),
-                linkTo(methodOn(CustomerController.class).all()).withRel("Customer"));
+                linkTo(methodOn(CustomerController.class).all()).withRel("Customers"));
     }
     @RequestMapping("/add")
     public String addCustomer(@RequestParam String fullName,@RequestParam String SSN ){
@@ -55,7 +55,11 @@ private final CustomerRepo customerRepo;
         customerRepo.deleteById(id);
         return "Customer "+tempCusName+" was successfully removed from database!";
     }
-
-
+    @PostMapping("/addByPost")
+    public Customer addCustomerByPost(@RequestBody Customer customer){
+        customerRepo.save(customer);
+        return customer;
+    }
+//"Customer "+customer.getFullName()+" was added to the database";
 
 }
