@@ -2,12 +2,18 @@ package com.example.webshop.Webshop.controllers;
 
 import com.example.webshop.Webshop.models.Customer;
 import com.example.webshop.Webshop.repos.CustomerRepo;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
 
 private final CustomerRepo customerRepo;
@@ -16,16 +22,31 @@ private final CustomerRepo customerRepo;
         this.customerRepo = customerRepo;
     }
 
+    @RequestMapping("")
+    CollectionModel<EntityModel<Customer>> all(){
+        List<EntityModel<Customer>> customerList=customerRepo.findAll().stream()
+                .map(item ->EntityModel.of(item,
+                        linkTo(methodOn(CustomerController.class).one(item.getId())).withSelfRel(),
+                        linkTo(methodOn(CustomerController.class).all()).withRel("Customers")))
+                .collect(Collectors.toList());
+        return CollectionModel.of(customerList,linkTo(methodOn(CustomerController.class)
+                .all()).withSelfRel());
+    }
+    @GetMapping("/{id}")
+    EntityModel<Customer> one(@PathVariable Long id) {
+
+        Customer customer = customerRepo.findById(id).orElse(null);
+
+        return EntityModel.of(customer,
+                linkTo(methodOn(CustomerController.class).one(id)).withSelfRel(),
+                linkTo(methodOn(CustomerController.class).all()).withRel("Customer"));
+    }
     @RequestMapping("/add")
     public String addCustomer(@RequestParam String fullName,@RequestParam String SSN ){
         customerRepo.save(new Customer(fullName,SSN));
         return "Customer "+fullName+" was added to the database";
     }
 
-    @RequestMapping("/allCustomers")
-    public List<Customer> allCustomers(){
-        return customerRepo.findAll();
-    }
     @RequestMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id ){
         String tempCusName;
@@ -34,10 +55,7 @@ private final CustomerRepo customerRepo;
         customerRepo.deleteById(id);
         return "Customer "+tempCusName+" was successfully removed from database!";
     }
-    @RequestMapping("/cusinfo/{id}")
-    public String customerInformation(@PathVariable Long id ){
-        Customer cus=customerRepo.findById(id).get();
-        return "This is the Customers full name: "+cus.getFullName()+" and this is their SSN: "+cus.getSSN();
-    }
+
+
 
 }
