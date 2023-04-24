@@ -22,6 +22,8 @@ private final CustomerRepo customerRepo;
         this.customerRepo = customerRepo;
     }
 
+
+
     @GetMapping("")
     CollectionModel<EntityModel<Customer>> all(){
         List<EntityModel<Customer>> customerList=customerRepo.findAll().stream()
@@ -56,9 +58,9 @@ private final CustomerRepo customerRepo;
         return "Customer "+tempCusName+" was successfully removed from database!";
     }
     @PostMapping("/addbypost")
-    public Customer addCustomerByPost(@RequestBody Customer customer){
+    public String addCustomerByPost(@RequestBody Customer customer){
         customerRepo.save(customer);
-        return customer;
+        return "Customer: "+customer.getFullName()+" was added to the database";
     }
 //"Customer "+customer.getFullName()+" was added to the database";
 

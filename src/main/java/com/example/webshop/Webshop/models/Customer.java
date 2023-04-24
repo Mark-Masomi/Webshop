@@ -16,9 +16,9 @@ public class Customer {
     private String fullName;
     private String SSN;
 
-
     public Customer(String fullName, String SSN) {
         this.fullName = fullName;
         this.SSN = SSN;
     }
+
 }
