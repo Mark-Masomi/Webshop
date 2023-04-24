@@ -55,7 +55,7 @@ private final CustomerRepo customerRepo;
         customerRepo.deleteById(id);
         return "Customer "+tempCusName+" was successfully removed from database!";
     }
-    @PostMapping("/addByPost")
+    @PostMapping("/addbypost")
     public Customer addCustomerByPost(@RequestBody Customer customer){
         customerRepo.save(customer);
         return customer;

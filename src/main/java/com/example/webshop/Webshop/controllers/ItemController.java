@@ -41,11 +41,17 @@ public class ItemController {
                 linkTo(methodOn(ItemController.class).one(id)).withSelfRel(),
                 linkTo(methodOn(ItemController.class).all()).withRel("Items"));
     }
-    @GetMapping("/add")
+    @RequestMapping("/add")
     public String addItem(@RequestParam String name,@RequestParam Long price){
         Item tempItem=new Item(name,price);
         itemRepo.save(tempItem);
         return "The new item "+tempItem.getName()+" was added to databese!";
+    }
+    @RequestMapping("/delet/{id}")
+    public String deleteItem(@PathVariable Long id){
+        Item item=itemRepo.findById(id).get();
+        itemRepo.deleteById(id);
+        return "The item named: "+item.getName()+" were removed";
     }
 
 

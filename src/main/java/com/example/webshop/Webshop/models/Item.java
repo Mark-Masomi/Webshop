@@ -12,9 +12,6 @@ public class Item {
     private Long id;
     private String name;
     private double price;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id")
-    private Purchase purchase;
 
     public Item(String name, double price) {
         this.name = name;
