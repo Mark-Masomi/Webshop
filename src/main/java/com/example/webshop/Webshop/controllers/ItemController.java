@@ -13,7 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/Item")
+@RequestMapping("/Items")
 public class ItemController {
     private final ItemRepo itemRepo;
 
@@ -47,11 +47,16 @@ public class ItemController {
         itemRepo.save(tempItem);
         return "The new item "+tempItem.getName()+" was added to databese!";
     }
-    @RequestMapping("/delet/{id}")
+    @RequestMapping("/delete/{id}")
     public String deleteItem(@PathVariable Long id){
         Item item=itemRepo.findById(id).get();
         itemRepo.deleteById(id);
         return "The item named: "+item.getName()+" were removed";
+    }
+    @PostMapping("/addbypost")
+    public String addItemByPost(@RequestBody Item item ){
+        itemRepo.save(item);
+        return "The new item: "+item.getName()+" was added to the database!";
     }
 
 
