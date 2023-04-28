@@ -14,7 +14,7 @@ import java.util.List;
 public class Purchase {
     @Id @GeneratedValue
     private Long id;
-    private Date dateOfPurchase;;
+    private Date dateOfPurchase;
     @ManyToOne @JoinColumn(name = "kund_id")
     private Customer kund;
     @ManyToMany
