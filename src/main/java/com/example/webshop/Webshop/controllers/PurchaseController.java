@@ -1,6 +1,7 @@
 package com.example.webshop.Webshop.controllers;
 
 import com.example.webshop.Webshop.models.Customer;
+import com.example.webshop.Webshop.models.Item;
 import com.example.webshop.Webshop.models.Purchase;
 import com.example.webshop.Webshop.repos.CustomerRepo;
 import com.example.webshop.Webshop.repos.ItemRepo;
@@ -8,6 +9,8 @@ import com.example.webshop.Webshop.repos.PurchaseRepo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import java.util.List;
@@ -29,21 +32,62 @@ public class PurchaseController {
     public List<Purchase> getAllPurchases(){
         return purchaseRepo.findAll();
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<Purchase> getPurchaseById(@PathVariable Long id){
-        Optional<Purchase> purchaseId = purchaseRepo.findById(id);
-        if (purchaseId.isPresent()) {
-            return ResponseEntity.ok(purchaseId.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @RequestMapping("/{id}")
+    public Purchase getPurchaseById(@PathVariable Long id){
+        return purchaseRepo.findById(id).get();
+    }
+    @RequestMapping("/delete/{id}")
+    public List<Purchase> deleteById(@PathVariable Long id){
+        purchaseRepo.deleteById(id);
+        return purchaseRepo.findAll();
     }
 
-    /*
-    @PostMapping("/new/{customerid}/{itemid}")
-    public String newPurchase(@PathVariable Long customerid,@PathVariable Long itemid ){
 
-    }*/
+    @PostMapping("/newbypost/{customerid}/{itemid}")
+    public String newPurchaseByPost(@PathVariable Long customerid,@PathVariable Long itemid ){
+        Customer customer=customerRepo.findById(customerid).get();
+        Item item=itemRepo.findById(itemid).get();
+        Date currentDate=new Date(System.currentTimeMillis());
+        List<Item> itemsList=new ArrayList<>();
+        itemsList.add(item);
+        Purchase purchase=new Purchase(currentDate,customer,itemsList);
+        purchaseRepo.save(purchase);
+        return "The purchase was added to database";
+    }
+    @RequestMapping("/moreitems/{purchaseid}/{newitemsid}")
+    public String addMoreItemsToPurchase(@PathVariable Long purchaseid,@PathVariable Long newitemsid){
+        Purchase existingPurchase=purchaseRepo.findById(purchaseid).get();
+        Item newitem=itemRepo.findById(newitemsid).get();
+        List<Item> itemList=existingPurchase.getItemsList();
+        itemList.add(newitem);
+        existingPurchase.setItemsList(itemList);
+        if (existingPurchase !=null){
+        purchaseRepo.save(existingPurchase);
+        }
+        return "The "+newitem.getName()+" was added to the existing purchase";
+    }
+    @RequestMapping("/newbyget/{customerid}/{itemid}")
+    public String newPurchaseByget(@PathVariable Long customerid,@PathVariable Long itemid ){
+        Customer customer=customerRepo.findById(customerid).get();
+        Item item=itemRepo.findById(itemid).get();
+        List<Item> itemsList=new ArrayList<>();
+        itemsList.add(item);
+        Date currentDate=new Date(System.currentTimeMillis());
+
+        Purchase purchase=new Purchase(currentDate,customer,itemsList);
+        purchaseRepo.save(purchase);
+        return "The purchase was added to database";
+    }
+    @RequestMapping("/forcustomer/{customerid}")
+    public List<Purchase> customerPurchases(@PathVariable Long customerid){
+        Customer customer=customerRepo.findById(customerid).get();
+        return purchaseRepo.findByKund(customer);
+    }
+
+
+    /*Date specificDate = Date.valueOf("2022-05-20");
+        System.out.println("Specific date: " + specificDate);
+    */
 }
 
 

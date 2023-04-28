@@ -1,23 +1,24 @@
 package com.example.webshop.Webshop.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Purchase {
     @Id @GeneratedValue
     private Long id;
     private Date dateOfPurchase;
     @ManyToOne @JoinColumn(name = "kund_id")
     private Customer kund;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "purchase_vara",
             joinColumns =@JoinColumn(name = "purchae_id"),
@@ -25,12 +26,12 @@ public class Purchase {
 
 
 
-    private List<Item> purchaseItems;
+    private List<Item> itemsList;
 
 
-    public Purchase(Date dateOfPurchase, Customer kund, List<Item> purchaseItems) {
+    public Purchase(Date dateOfPurchase, Customer kund, List<Item> itemsList) {
         this.dateOfPurchase = dateOfPurchase;
         this.kund = kund;
-        this.purchaseItems = purchaseItems;
+        this.itemsList=itemsList;
     }
 }
