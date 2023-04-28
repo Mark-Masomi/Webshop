@@ -1,14 +1,13 @@
 package com.example.webshop.Webshop.controllers;
 
+import com.example.webshop.Webshop.models.Customer;
 import com.example.webshop.Webshop.models.Purchase;
 import com.example.webshop.Webshop.repos.CustomerRepo;
 import com.example.webshop.Webshop.repos.ItemRepo;
 import com.example.webshop.Webshop.repos.PurchaseRepo;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 import java.util.List;
@@ -40,11 +39,19 @@ public class PurchaseController {
         }
     }
 
+    /*
+    @PostMapping("/new/{customerid}/{itemid}")
+    public String newPurchase(@PathVariable Long customerid,@PathVariable Long itemid ){
 
-
-
-
-
-
-
+    }*/
 }
+
+
+
+
+
+
+
+
+
+

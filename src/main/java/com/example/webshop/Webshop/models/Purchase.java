@@ -22,8 +22,15 @@ public class Purchase {
             name = "purchase_vara",
             joinColumns =@JoinColumn(name = "purchae_id"),
             inverseJoinColumns = @JoinColumn(name = "purchase_id"))
+
+
+
     private List<Item> purchaseItems;
 
 
-
+    public Purchase(Date dateOfPurchase, Customer kund, List<Item> purchaseItems) {
+        this.dateOfPurchase = dateOfPurchase;
+        this.kund = kund;
+        this.purchaseItems = purchaseItems;
+    }
 }
