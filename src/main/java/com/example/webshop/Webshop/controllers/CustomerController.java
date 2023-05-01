@@ -48,6 +48,11 @@ private final CustomerRepo customerRepo;
         customerRepo.save(new Customer(fullName,SSN));
         return "Customer "+fullName+" was added to the database";
     }
+    @PostMapping("/addbypost")
+    public String addCustomerByPost(@RequestBody Customer customer){
+        customerRepo.save(customer);
+        return "Customer: "+customer.getFullName()+" was added to the database";
+    }
 
     @RequestMapping("/delete/{id}")
     public String deleteCustomer(@PathVariable Long id ){
@@ -56,11 +61,6 @@ private final CustomerRepo customerRepo;
         tempCusName=tempcustomer.getFullName();
         customerRepo.deleteById(id);
         return "Customer "+tempCusName+" was successfully removed from database!";
-    }
-    @PostMapping("/addbypost")
-    public String addCustomerByPost(@RequestBody Customer customer){
-        customerRepo.save(customer);
-        return "Customer: "+customer.getFullName()+" was added to the database";
     }
 
 //"Customer "+customer.getFullName()+" was added to the database";

@@ -54,18 +54,6 @@ public class PurchaseController {
         purchaseRepo.save(purchase);
         return "The purchase was added to database";
     }
-    @RequestMapping("/moreitems/{purchaseid}/{newitemsid}")
-    public String addMoreItemsToPurchase(@PathVariable Long purchaseid,@PathVariable Long newitemsid){
-        Purchase existingPurchase=purchaseRepo.findById(purchaseid).get();
-        Item newitem=itemRepo.findById(newitemsid).get();
-        List<Item> itemList=existingPurchase.getItemsList();
-        itemList.add(newitem);
-        existingPurchase.setItemsList(itemList);
-        if (existingPurchase !=null){
-        purchaseRepo.save(existingPurchase);
-        }
-        return "The "+newitem.getName()+" was added to the existing purchase";
-    }
     @RequestMapping("/newbyget/{customerid}/{itemid}")
     public String newPurchaseByget(@PathVariable Long customerid,@PathVariable Long itemid ){
         Customer customer=customerRepo.findById(customerid).get();
@@ -77,6 +65,18 @@ public class PurchaseController {
         Purchase purchase=new Purchase(currentDate,customer,itemsList);
         purchaseRepo.save(purchase);
         return "The purchase was added to database";
+    }
+    @RequestMapping("/moreitems/{purchaseid}/{newitemsid}")
+    public String addMoreItemsToPurchase(@PathVariable Long purchaseid,@PathVariable Long newitemsid){
+        Purchase existingPurchase=purchaseRepo.findById(purchaseid).get();
+        Item newitem=itemRepo.findById(newitemsid).get();
+        List<Item> itemList=existingPurchase.getItemsList();
+        itemList.add(newitem);
+        existingPurchase.setItemsList(itemList);
+        if (existingPurchase !=null){
+        purchaseRepo.save(existingPurchase);
+        }
+        return "The "+newitem.getName()+" was added to the existing purchase";
     }
     @RequestMapping("/forcustomer/{customerid}")
     public List<Purchase> customerPurchases(@PathVariable Long customerid){
