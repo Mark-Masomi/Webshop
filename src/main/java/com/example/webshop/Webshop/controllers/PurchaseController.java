@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/purchases")
@@ -81,9 +82,12 @@ public class PurchaseController {
     @RequestMapping("/forcustomer/{customerid}")
     public List<Purchase> customerPurchases(@PathVariable Long customerid){
         Customer customer=customerRepo.findById(customerid).get();
-        //sökfram alla köp i databasen och filtrera efter vilken kund som gjort alla köpen
-
+        /*List<Purchase> purchases=purchaseRepo.findAll();
+        List<Purchase> customerPurchases=purchases.stream().filter(purchase ->
+                purchase.getKund().equals(customer)).collect(Collectors.toList());
+        return customerPurchases;*/
         return purchaseRepo.findByKund(customer);
+
     }
 
 
@@ -92,6 +96,7 @@ public class PurchaseController {
         System.out.println("Specific date: " + specificDate);
     */
 }
+    //sökfram alla köp i databasen och filtrera efter vilken kund som gjort alla köpen
 
 
 
