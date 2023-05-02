@@ -6,15 +6,14 @@ import com.example.webshop.Webshop.models.Purchase;
 import com.example.webshop.Webshop.repos.CustomerRepo;
 import com.example.webshop.Webshop.repos.ItemRepo;
 import com.example.webshop.Webshop.repos.PurchaseRepo;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Optional;
+
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/purchases")
