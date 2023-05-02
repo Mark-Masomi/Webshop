@@ -31,7 +31,7 @@ public class WebshopApplication {
     }
 
 
-  /*
+/*
     @Bean
     public CommandLineRunner shopDatabase(CustomerRepo customerRepo, ItemRepo itemRepo, PurchaseRepo purchaseRepo){
         return (args) ->{
@@ -69,7 +69,7 @@ public class WebshopApplication {
 
         };
     }
-*/
 
+*/
 
 }

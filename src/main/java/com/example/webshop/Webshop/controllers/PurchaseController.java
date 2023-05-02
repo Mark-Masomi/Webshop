@@ -81,8 +81,11 @@ public class PurchaseController {
     @RequestMapping("/forcustomer/{customerid}")
     public List<Purchase> customerPurchases(@PathVariable Long customerid){
         Customer customer=customerRepo.findById(customerid).get();
+        //sökfram alla köp i databasen och filtrera efter vilken kund som gjort alla köpen
+
         return purchaseRepo.findByKund(customer);
     }
+
 
 
     /*Date specificDate = Date.valueOf("2022-05-20");
