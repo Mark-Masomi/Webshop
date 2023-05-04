@@ -6,8 +6,10 @@ import com.example.webshop.Webshop.models.Purchase;
 import com.example.webshop.Webshop.repos.CustomerRepo;
 import com.example.webshop.Webshop.repos.ItemRepo;
 import com.example.webshop.Webshop.repos.PurchaseRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class PurchaseController {
 
     @GetMapping("")
     public List<Purchase> getAllPurchases(){
+
         return purchaseRepo.findAll();
     }
     @RequestMapping("/{id}")
@@ -78,11 +81,13 @@ public class PurchaseController {
         purchaseRepo.save(purchase);
         return "The purchase was added to database";
     }
-    @RequestMapping("/forcustomer/{customerid}")
-    public List<Purchase> customerPurchases(@PathVariable Long customerid){
-        Customer customer=customerRepo.findById(customerid).get();
+    @GetMapping("/forcustomer/{customerid}")
+    public List<Purchase> customerPurchases(@PathVariable Long customerid) {
+        Customer customer = customerRepo.findById(customerid)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer not found"));
         return purchaseRepo.findByKund(customer);
     }
+
 
 
     /*Date specificDate = Date.valueOf("2022-05-20");

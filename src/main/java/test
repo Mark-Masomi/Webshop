@@ -1,0 +1,136 @@
+import com.example.complexhibernatefilmdemo.Bank.Models.Kategori;
+import com.example.complexhibernatefilmdemo.Bank.Repos.KategoriRepo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+
+import java.util.Arrays;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class KategoriControllerTest {
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    private KategoriRepo mockRepo;
+
+    @BeforeEach
+    public void init(){
+        Kategori k1 = new Kategori(1L,"Guld", null);
+        Kategori k2 = new Kategori(2L,"Silver", null);
+        Kategori k3 = new Kategori(3L, "Brons",null);
+
+        when(mockRepo.findById(1L)).thenReturn(Optional.of(k1));
+        when(mockRepo.findById(2L)).thenReturn(Optional.of(k2));
+        when(mockRepo.findById(3L)).thenReturn(Optional.of(k3));
+        when(mockRepo.findAll()).thenReturn(Arrays.asList(k1,k2,k3));
+
+    }
+
+
+    /*
+       @RequestMapping("kategorier/add")
+          public String addKategori(@RequestParam String namn) {
+          kategoriRepo.save(new Kategori(namn));
+          return "Kategori "+namn+" lades till";
+    }
+     */
+    @Test
+    void addKategori() throws Exception{
+        this.mvc.perform(get("/kategorier/add?namn=plast"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("Kategori plast lades till")));
+    }
+
+
+    /*
+      @RequestMapping("kategorier/delete/{id}")
+         public String deleteKategori(@PathVariable Long id){
+         kategoriRepo.deleteById(id);
+         return "kategori "+id+" togs bort";
+    }
+     */
+    @Test
+    void deleteKategori() throws Exception{
+        this.mvc.perform(get("/kategorier/delete/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("kategori 1 togs bort")));
+    }
+
+    /*
+      @RequestMapping("kategorier")
+         public List<Kategori> getAllKategorier(){
+         return kategoriRepo.findAll();
+    }
+     */
+
+    @Test
+    void getAllKategorier() throws Exception {
+        this.mvc.perform(get("/kategorier"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[{\"name\":\"Guld\",\"id\":1,\"kunder\":null}," +
+                        "{\"name\":\"Silver\",\"kunder\":null,\"id\":2}," +
+                        "{\"name\":\"Brons\",\"kunder\":null,\"id\":3}]"));
+    }
+
+    /*
+    @RequestMapping("kategori")
+    public Kategori getKategoriById(@RequestParam Long id) {
+        return kategoriRepo.findById(id).orElse(null);
+    }
+     */
+    @Test
+    void getKategoriById() throws Exception{
+        this.mvc.perform(get("/kategori?id=1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("{\"name\":\"Guld\",\"id\":1,\"kunder\":null}"));
+    }
+
+    /*
+     @PostMapping("/kategorier/addByPost")
+    public String addBookByPOST(@RequestBody Kategori k){
+        kategoriRepo.save(k);
+        return "Kategori "+k.getName()+" lades till";
+    }
+     */
+    @Test
+    void addKategoriByPost() throws Exception {
+        this.mvc.perform(post("/kategorier/addByPost")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\":4, \"name\":\"garn\", \"kund\":null}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("Kategori garn lades till")));
+    }
+}
+
+
+@BeforeEach
+public void init() {
+    Customer c1 = new Customer(1L, "Maac Johnsson", "239829");
+    Customer c2 = new Customer(2L, "Jesper Schon", "918273");
+    Customer c3 = new Customer(3L, "Dimitri Jakobsson", "273635");
+    Customer c4 = new Customer(4L, "Jax Payne", "837263");
+
+    when(mockRepo.findById(1L)).thenReturn(Optional.of(c1));
+    when(mockRepo.findById(2L)).thenReturn(Optional.of(c2));
+    when(mockRepo.findById(3L)).thenReturn(Optional.of(c3));
+    when(mockRepo.findById(4L)).thenReturn(Optional.of(c4));
+    when(mockRepo.findAll()).thenReturn(Arrays.asList(c1, c2, c3, c4));
+}

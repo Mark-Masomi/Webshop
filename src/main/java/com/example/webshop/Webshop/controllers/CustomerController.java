@@ -2,8 +2,11 @@ package com.example.webshop.Webshop.controllers;
 
 import com.example.webshop.Webshop.models.Customer;
 import com.example.webshop.Webshop.repos.CustomerRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,5 +67,6 @@ private final CustomerRepo customerRepo;
     }
 
 //"Customer "+customer.getFullName()+" was added to the database";
+
 
 }
