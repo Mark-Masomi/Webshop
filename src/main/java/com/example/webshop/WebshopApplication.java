@@ -29,8 +29,6 @@ public class WebshopApplication {
         SpringApplication.run(WebshopApplication.class, args);
     }
 
-
-
 /*
     @Bean
     public CommandLineRunner shopDatabase(CustomerRepo customerRepo, ItemRepo itemRepo, PurchaseRepo purchaseRepo){
@@ -77,5 +75,6 @@ public class WebshopApplication {
 
 
 
+*/
 
 }
